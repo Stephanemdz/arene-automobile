@@ -100,7 +100,12 @@ require_once __DIR__ . '/../partials/header.php';
                             <td class="td-id">#<?= (int)$event['id'] ?></td>
                             <td class="td-title">
                                 <strong><?= e($event['title']) ?></strong>
-                                <span class="td-desc"><?= e(mb_substr($event['description'], 0, 80)) ?>…</span>
+                                <button type="button" class="td-desc-toggle" onclick="toggleDesc(<?= (int)$event['id'] ?>)">
+                                    Voir la description complète
+                                    </button>
+                                    <div class="td-desc-full" id="desc-<?= (int)$event['id'] ?>" hidden>
+                                    <?= nl2br(e($event['description'])) ?>
+                                    </div>
                             </td>
                             <td>
                                 <span class="type-tag type-tag--<?= e($event['type']) ?>">
@@ -116,8 +121,12 @@ require_once __DIR__ . '/../partials/header.php';
                                 </span>
                             </td>
 
-                            <!-- ── Boutons d'action (chacun = formulaire POST sécurisé) ── -->
+                            <!-- Boutons d'action (chacun = formulaire POST sécurisé) -->
                             <td class="td-actions">
+                                <a href="<?= APP_URL ?>/views/admin/edit_event.php?id=<?= (int)$event['id'] ?>"
+                                    class="btn btn--neutral btn--sm" title="Modifier l'événement">
+                                    ✎ Modifier
+                                </a>
                                 <?php if ($event['status'] !== 'accepte'): ?>
                                     <form method="POST" action="<?= APP_URL ?>/src/controllers/EventController.php">
                                         <input type="hidden" name="csrf_token" value="<?= e(csrfToken()) ?>">
@@ -166,5 +175,17 @@ require_once __DIR__ . '/../partials/header.php';
     <?php endif; ?>
 
 </section>
-
+<script>
+function toggleDesc(id) {
+    const el = document.getElementById('desc-' + id);
+    const btn = el.previousElementSibling;
+    if (el.hidden) {
+        el.hidden = false;
+        btn.textContent = 'Masquer la description';
+    } else {
+        el.hidden = true;
+        btn.textContent = 'Voir la description complète';
+    }
+}
+</script>
 <?php require_once __DIR__ . '/../partials/footer.php'; ?>

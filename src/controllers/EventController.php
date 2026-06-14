@@ -115,6 +115,40 @@ class EventController
 
         return $errors;
     }
+
+    public function edit(): void
+{
+    requireLogin(adminOnly: true);
+    verifyCsrf();
+
+    $id = filter_input(INPUT_POST, 'event_id', FILTER_VALIDATE_INT);
+    if (!$id) {
+        setFlash('error', 'Événement invalide.');
+        redirect('views/admin/events.php');
+    }
+
+    $errors = $this->validateSubmitForm($_POST);
+
+    if (!empty($errors)) {
+        $_SESSION['form_errors'] = $errors;
+        $_SESSION['form_old']    = $_POST;
+        redirect('views/admin/edit_event.php?id=' . $id);
+    }
+
+    $this->eventModel->update($id, [
+        'title'       => trim($_POST['title']),
+        'description' => trim($_POST['description']),
+        'event_date'  => $_POST['event_date'],
+        'event_time'  => $_POST['event_time'] ?: null,
+        'location'    => trim($_POST['location']),
+        'latitude'    => $_POST['latitude']  !== '' ? (float) $_POST['latitude']  : null,
+        'longitude'   => $_POST['longitude'] !== '' ? (float) $_POST['longitude'] : null,
+        'type'        => $_POST['type'],
+    ]);
+
+    setFlash('success', 'Événement mis à jour avec succès.');
+    redirect('views/admin/events.php');
+}
 }
 
 // Routage minimal : action déterminée par le paramètre POST
@@ -124,5 +158,6 @@ $controller = new EventController();
 match($action) {
     'submit'        => $controller->submit(),
     'update_status' => $controller->updateStatus(),
+    'edit'          => $controller->edit(),
     default         => redirect('index.php'),
 };

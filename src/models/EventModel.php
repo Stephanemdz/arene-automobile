@@ -99,4 +99,32 @@ class EventModel
         $stmt->execute([':status' => $status, ':id' => $id]);
         return $stmt->rowCount() > 0;
     }
+
+    public function update(int $id, array $data): bool
+{
+    $stmt = $this->pdo->prepare(
+        'UPDATE events SET
+            title       = :title,
+            description = :description,
+            event_date  = :event_date,
+            event_time  = :event_time,
+            location    = :location,
+            latitude    = :latitude,
+            longitude   = :longitude,
+            type        = :type
+         WHERE id = :id'
+    );
+
+    return $stmt->execute([
+        ':title'       => $data['title'],
+        ':description' => $data['description'],
+        ':event_date'  => $data['event_date'],
+        ':event_time'  => $data['event_time'] ?? null,
+        ':location'    => $data['location'],
+        ':latitude'    => $data['latitude']  ?? null,
+        ':longitude'   => $data['longitude'] ?? null,
+        ':type'        => $data['type'],
+        ':id'          => $id,
+    ]);
+}
 }

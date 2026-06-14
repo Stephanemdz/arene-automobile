@@ -1,8 +1,3 @@
-/* ============================================================
-   public/css/admin.css — Styles spécifiques au back-office admin
-   ============================================================ */
-
-/* ── En-tête admin ── */
 .admin-header {
     display         : flex;
     align-items     : center;
@@ -156,7 +151,30 @@
 .table-row--refuse     { border-left: 3px solid var(--color-red);
                          opacity: 0.7; }
 
-/* ── Responsive ── */
+.td-desc-toggle {
+    font-size: var(--text-xs);
+    color: var(--color-red);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-1) 0;
+    display: block;
+    text-decoration: underline;
+}
+
+.td-desc-full {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-chrome);
+    white-space: normal;
+    max-width: 320px;
+    background: var(--color-asphalt);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+}
+
+/* Responsive */
 @media (max-width: 900px) {
     .filter-bar { flex-direction: column; }
     .filter-group { min-width: unset; width: 100%; }
