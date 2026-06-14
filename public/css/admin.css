@@ -1,0 +1,163 @@
+/* ============================================================
+   public/css/admin.css — Styles spécifiques au back-office admin
+   ============================================================ */
+
+/* ── En-tête admin ── */
+.admin-header {
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+    flex-wrap       : wrap;
+    gap             : var(--space-4);
+    margin-bottom   : var(--space-8);
+    padding-bottom  : var(--space-6);
+    border-bottom   : 1px solid var(--border-color);
+}
+
+.admin-title {
+    font-size      : var(--text-3xl);
+    color          : var(--color-chrome-bright);
+}
+
+.admin-count {
+    font-size  : var(--text-sm);
+    color      : var(--color-chrome-dim);
+    font-weight: 500;
+}
+
+/* ── Barre de filtres ── */
+.filter-bar {
+    display     : flex;
+    flex-wrap   : wrap;
+    align-items : flex-end;
+    gap         : var(--space-4);
+    margin-bottom: var(--space-6);
+    padding     : var(--space-5);
+    background  : var(--color-asphalt-mid);
+    border      : 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.filter-group {
+    display        : flex;
+    flex-direction : column;
+    gap            : var(--space-2);
+    min-width      : 180px;
+}
+
+.filter-label {
+    font-size      : var(--text-xs);
+    font-weight    : 600;
+    color          : var(--color-chrome-dim);
+    text-transform : uppercase;
+    letter-spacing : 0.06em;
+}
+
+.filter-select {
+    background    : var(--color-asphalt);
+    border        : 1px solid var(--border-color);
+    border-radius : var(--radius-sm);
+    color         : var(--color-chrome-bright);
+    padding       : var(--space-2) var(--space-3);
+    font-size     : var(--text-sm);
+    cursor        : pointer;
+    appearance    : none;
+}
+
+.filter-select:focus {
+    outline      : none;
+    border-color : var(--color-red);
+}
+
+/* ── Wrapper responsive du tableau ── */
+.table-wrapper {
+    overflow-x    : auto;
+    border-radius : var(--radius-md);
+    border        : 1px solid var(--border-color);
+    box-shadow    : var(--shadow-md);
+}
+
+/* ── Tableau admin ── */
+.admin-table {
+    width           : 100%;
+    border-collapse : collapse;
+    font-size       : var(--text-sm);
+    white-space     : nowrap;
+}
+
+.admin-table thead {
+    background : var(--color-asphalt-light);
+}
+
+.admin-table th {
+    padding        : var(--space-3) var(--space-4);
+    text-align     : left;
+    font-size      : var(--text-xs);
+    font-weight    : 700;
+    color          : var(--color-chrome-dim);
+    text-transform : uppercase;
+    letter-spacing : 0.08em;
+    border-bottom  : 1px solid var(--border-color);
+}
+
+.admin-table tbody tr {
+    background : var(--color-asphalt-mid);
+    border-bottom : 1px solid var(--border-color);
+    transition    : background var(--transition-fast);
+}
+
+.admin-table tbody tr:hover {
+    background: var(--color-asphalt-light);
+}
+
+.admin-table td {
+    padding : var(--space-3) var(--space-4);
+    vertical-align: middle;
+    color   : var(--color-chrome);
+}
+
+/* Colonne ID */
+.td-id {
+    font-family : var(--font-mono);
+    font-size   : var(--text-xs);
+    color       : var(--color-chrome-dim);
+    width       : 48px;
+}
+
+/* Colonne titre avec description abrégée */
+.td-title {
+    display        : flex;
+    flex-direction : column;
+    gap            : var(--space-1);
+    max-width      : 280px;
+    white-space    : normal;
+}
+
+.td-desc {
+    font-size : var(--text-xs);
+    color     : var(--color-chrome-dim);
+}
+
+/* Colonne actions : empile les formulaires POST */
+.td-actions {
+    display   : flex;
+    gap       : var(--space-2);
+    flex-wrap : wrap;
+    align-items: center;
+}
+
+.td-actions form {
+    display: contents;   /* les boutons flottent directement dans le flex */
+}
+
+/* ── Couleur de fond des lignes selon le statut ── */
+.table-row--en_attente { border-left: 3px solid var(--color-pending); }
+.table-row--accepte    { border-left: 3px solid var(--color-accept);  }
+.table-row--refuse     { border-left: 3px solid var(--color-red);
+                         opacity: 0.7; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .filter-bar { flex-direction: column; }
+    .filter-group { min-width: unset; width: 100%; }
+}

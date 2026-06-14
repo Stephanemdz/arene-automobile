@@ -1,0 +1,83 @@
+:root {
+    /* Couleurs primaires */
+    --color-asphalt       : #12141A;   /* fond principal — bitume nuit */
+    --color-asphalt-mid   : #1E2028;   /* cartes, surfaces secondaires */
+    --color-asphalt-light : #2C2F3A;   /* bordures, inputs */
+
+    /* ── Accent course ── */
+    --color-red           : #E8002D;   /* rouge Ferrari / drapeau départ */
+    --color-red-hover     : #C40025;
+    --color-red-glow      : rgba(232, 0, 45, 0.18);
+
+    /* ── Chrome & métallique ── */
+    --color-chrome        : #C8CDD8;   /* texte principal */
+    --color-chrome-dim    : #7A8096;   /* texte secondaire, labels */
+    --color-chrome-bright : #ECEEF3;   /* titres, emphase */
+
+    /* ── Statuts ── */
+    --color-accept        : #00C37A;   /* vert circuit */
+    --color-accept-bg     : rgba(0, 195, 122, 0.12);
+    --color-refuse        : #E8002D;
+    --color-refuse-bg     : rgba(232, 0, 45, 0.12);
+    --color-pending       : #F59E0B;   /* ambre */
+    --color-pending-bg    : rgba(245, 158, 11, 0.12);
+
+    /* Types d'événements */
+    --color-rassemblement : #E8002D;  /* rouge */ 
+    --color-salon         : #457B9D;  /* bleu */
+    --color-course        : #F4A261; /* orange */
+    --color-trackday      : #2A9D8F;/* vert */
+    --color-roadtrip      : #8338EC;/* violet */
+
+    /* ── Typographie ── */
+    --font-display  : 'Rajdhani', 'Barlow Condensed', system-ui, sans-serif;
+    --font-body     : 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono     : 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* ── Échelle typographique ── */
+    --text-xs   : 0.75rem;    /* 12px */
+    --text-sm   : 0.875rem;   /* 14px */
+    --text-base : 1rem;       /* 16px */
+    --text-lg   : 1.125rem;   /* 18px */
+    --text-xl   : 1.25rem;    /* 20px */
+    --text-2xl  : 1.5rem;     /* 24px */
+    --text-3xl  : 1.875rem;   /* 30px */
+    --text-4xl  : 2.25rem;    /* 36px */
+    --text-5xl  : 3rem;       /* 48px */
+
+    /* ── Espacement ── */
+    --space-1  : 0.25rem;
+    --space-2  : 0.5rem;
+    --space-3  : 0.75rem;
+    --space-4  : 1rem;
+    --space-5  : 1.25rem;
+    --space-6  : 1.5rem;
+    --space-8  : 2rem;
+    --space-10 : 2.5rem;
+    --space-12 : 3rem;
+    --space-16 : 4rem;
+    --space-20 : 5rem;
+
+    /* ── Bordures & rayons ── */
+    --radius-sm   : 4px;
+    --radius-md   : 8px;
+    --radius-lg   : 12px;
+    --radius-full : 9999px;
+
+    --border-color         : var(--color-asphalt-light);
+    --border-color-focus   : var(--color-red);
+
+    /* ── Ombres ── */
+    --shadow-sm  : 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md  : 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg  : 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-red : 0 0 20px var(--color-red-glow);
+
+    /* ── Transitions ── */
+    --transition-fast   : 120ms ease;
+    --transition-normal : 220ms ease;
+
+    /* ── Layout ── */
+    --container-max : 1200px;
+    --header-height : 64px;
+}

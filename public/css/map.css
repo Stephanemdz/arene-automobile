@@ -1,0 +1,127 @@
+
+/* En-tête de la section carte */
+.map-section__header {
+    margin-bottom : var(--space-6);
+}
+
+.map-filters {
+    display     : flex;
+    flex-wrap   : wrap;
+    gap         : var(--space-2);
+    margin-bottom: var(--space-4);
+}
+
+.map-filter-btn {
+    padding       : var(--space-2) var(--space-4);
+    border-radius : var(--radius-full);
+    border        : 1px solid var(--border-color);
+    font-size     : var(--text-xs);
+    font-weight   : 600;
+    color         : var(--color-chrome-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background    : transparent;
+    cursor        : pointer;
+    transition    : all var(--transition-fast);
+}
+
+.map-filter-btn:hover {
+    border-color : var(--color-chrome-dim);
+    color        : var(--color-chrome-bright);
+}
+
+.map-filter-btn--active {
+    background   : var(--color-red);
+    border-color : var(--color-red);
+    color        : #fff;
+}
+
+.leaflet-map {
+    width         : 100%;
+    height        : 600px;
+    border-radius : var(--radius-lg);
+    border        : 1px solid var(--border-color);
+    box-shadow    : var(--shadow-md);
+    overflow      : hidden;
+}
+
+/* Aperçu carte */
+.map-preview-wrapper {
+    margin-bottom : var(--space-5);
+}
+
+.map-preview {
+    width         : 100%;
+    height        : 240px;
+    border-radius : var(--radius-md);
+    border        : 1px solid var(--border-color);
+    background    : var(--color-asphalt);
+    overflow      : hidden;
+    display       : none;    /* affiché par JS une fois géocodé */
+}
+
+.map-preview.is-visible {
+    display: block;
+}
+
+.leaflet-popup-content-wrapper {
+    background    : var(--color-asphalt-mid) !important;
+    border        : 1px solid var(--border-color) !important;
+    border-radius : var(--radius-md) !important;
+    box-shadow    : var(--shadow-lg) !important;
+    color         : var(--color-chrome) !important;
+}
+
+.leaflet-popup-tip {
+    background: var(--color-asphalt-mid) !important;
+}
+
+.leaflet-popup-close-button {
+    color: var(--color-chrome-dim) !important;
+}
+
+.map-popup {
+    padding    : var(--space-2);
+    min-width  : 200px;
+}
+
+.popup-type {
+    display        : inline-block;
+    padding        : var(--space-1) var(--space-2);
+    border-radius  : var(--radius-sm);
+    font-size      : 11px;
+    font-weight    : 700;
+    text-transform : uppercase;
+    letter-spacing : 0.06em;
+    color          : #fff;
+    margin-bottom  : var(--space-2);
+}
+
+.popup-type--rassemblement { background: var(--color-rassemblement); }
+.popup-type--salon         { background: var(--color-salon);         }
+.popup-type--course        { background: var(--color-course); color: #111; }
+.popup-type--trackday      { background: var(--color-trackday);      }
+.popup-type--roadtrip      { background: var(--color-roadtrip);      }
+
+.popup-title {
+    font-family    : var(--font-display);
+    font-size      : var(--text-base);
+    font-weight    : 700;
+    color          : var(--color-chrome-bright);
+    text-transform : uppercase;
+    letter-spacing : 0.03em;
+    margin-bottom  : var(--space-2);
+}
+
+.popup-date,
+.popup-location {
+    font-size     : var(--text-sm);
+    color         : var(--color-chrome-dim);
+    margin-bottom : var(--space-1);
+    max-width     : none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .leaflet-map  { height: 400px; }
+}
