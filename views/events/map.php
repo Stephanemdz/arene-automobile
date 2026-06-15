@@ -40,7 +40,6 @@ require_once __DIR__ . '/../partials/header.php';
 <script>
 const EVENTS_DATA = <?= $eventsJson ?>;
 
-// Initialisation de la carte centrée sur la France 
 const map = L.map('events-map').setView([46.603354, 1.888334], 6);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

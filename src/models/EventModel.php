@@ -11,10 +11,7 @@ class EventModel
     {
         $stmt = $this->pdo->prepare(
             'SELECT id, title, event_date, event_time, location,
-                    latitude, longitude, type, cover_image
-             FROM   events
-             WHERE  status = :status
-             ORDER  BY event_date ASC'
+                    latitude, longitude, type, cover_image FROM   events WHERE  status = :status ORDER  BY event_date ASC'
         );
         $stmt->execute([':status' => 'accepte']);
         return $stmt->fetchAll();
@@ -23,9 +20,7 @@ class EventModel
     /* Événements filtrables pour le back-office admin. */
     public function getFiltered(?string $status, ?string $type): array
     {
-        $sql    = 'SELECT e.*, u.username FROM events e
-                   JOIN   users u ON u.id = e.user_id
-                   WHERE  1=1';
+        $sql    = 'SELECT e.*, u.username FROM events e JOIN   users u ON u.id = e.user_id WHERE  1=1';
         $params = [];
 
         if ($status !== null && $status !== '') {
@@ -48,10 +43,7 @@ class EventModel
     public function findById(int $id): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT e.*, u.username
-             FROM   events e
-             JOIN   users  u ON u.id = e.user_id
-             WHERE  e.id = :id'
+            'SELECT e.*, u.username FROM   events  JOIN   users  u ON u.id = e.user_id WHERE  e.id = :id'
         );
         $stmt->execute([':id' => $id]);
         $row = $stmt->fetch();
@@ -61,12 +53,8 @@ class EventModel
     public function create(array $data): int
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO events
-                (user_id, title, description, event_date, event_time,
-                 location, latitude, longitude, type, cover_image)
-             VALUES
-                (:user_id, :title, :description, :event_date, :event_time,
-                 :location, :latitude, :longitude, :type, :cover_image)'
+            'INSERT INTO event (user_id, title, description, event_date, event_time, location, latitude, longitude, type, cover_image)
+             VALUE (:user_id, :title, :description, :event_date, :event_time, :location, :latitude, :longitude, :type, :cover_image)'
         );
 
         $stmt->execute([
