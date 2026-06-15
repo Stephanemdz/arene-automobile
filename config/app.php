@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 define('APP_NAME',    'Arène Automobile');
-define('APP_URL',     'http://localhost/automobile_arene');  // ← adapter en prod
+define('APP_URL',     'http://localhost/automobile_arene');
 define('APP_VERSION', '1.0.0');
 
 // Durée de session (en secondes) — 2 heures

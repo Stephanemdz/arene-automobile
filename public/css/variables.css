@@ -9,11 +9,7 @@
     --color-red-hover     : #C40025;
     --color-red-glow      : rgba(232, 0, 45, 0.18);
 
-    /* ── Chrome & métallique ── */
-    --color-chrome        : #C8CDD8;   /* texte principal */
-    --color-chrome-dim    : #7A8096;   /* texte secondaire, labels */
-    --color-chrome-bright : #ECEEF3;   /* titres, emphase */
-
+    
     /* ── Statuts ── */
     --color-accept        : #00C37A;   /* vert circuit */
     --color-accept-bg     : rgba(0, 195, 122, 0.12);
@@ -21,14 +17,19 @@
     --color-refuse-bg     : rgba(232, 0, 45, 0.12);
     --color-pending       : #F59E0B;   /* ambre */
     --color-pending-bg    : rgba(245, 158, 11, 0.12);
-
+    
     /* Types d'événements */
     --color-rassemblement : #E8002D;  /* rouge */ 
     --color-salon         : #457B9D;  /* bleu */
     --color-course        : #F4A261; /* orange */
     --color-trackday      : #2A9D8F;/* vert */
     --color-roadtrip      : #8338EC;/* violet */
-
+    
+    /* ── Chrome & métallique ── */
+    --color-chrome        : #C8CDD8;   /* texte principal */
+    --color-chrome-dim    : #7A8096;   /* texte secondaire, labels */
+    --color-chrome-bright : #ECEEF3;   /* titres, emphase */
+    
     /* ── Typographie ── */
     --font-display  : 'Rajdhani', 'Barlow Condensed', system-ui, sans-serif;
     --font-body     : 'Inter', 'Segoe UI', system-ui, sans-serif;
