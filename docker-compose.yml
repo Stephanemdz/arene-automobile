@@ -1,0 +1,64 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: arene_app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_NAME: arene_automobile
+      DB_USER: arene_user
+      DB_PASS: arene_pass
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - arene_network
+
+  db:
+    image: mysql:8.0
+    container_name: arene_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: arene_automobile
+      MYSQL_USER: arene_user
+      MYSQL_PASSWORD: arene_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - arene_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: arene_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root_password
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - arene_network
+
+volumes:
+  db_data:
+
+networks:
+  arene_network:
+    driver: bridge
