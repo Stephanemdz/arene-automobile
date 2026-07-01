@@ -25,24 +25,45 @@
             <span class="logo-icon">🏁</span>
             <span class="logo-text"><?= APP_NAME ?></span>
         </a>
+    <nav class="main-nav" aria-label="Navigation principale">
+    <a href="<?= APP_URL ?>/index.php">Accueil</a>
+    <a href="<?= APP_URL ?>/views/events/map.php">Carte</a>
+    <a href="<?= APP_URL ?>/views/contact/index.php">Contact</a>
 
-        <nav class="main-nav" aria-label="Navigation principale">
-            <a href="<?= APP_URL ?>/index.php">Accueil</a>
-            <a href="<?= APP_URL ?>/views/events/map.php">Carte</a>
+    <?php if (isLoggedIn()): ?>
+        <a href="<?= APP_URL ?>/views/events/submit.php">Proposer un événement</a>
+        <a href="<?= APP_URL ?>/views/user/profile.php">Mon profil</a>
 
-            <?php if (isLoggedIn()): ?>
-                <a href="<?= APP_URL ?>/views/events/submit.php">Proposer un événement</a>
-                <?php if (isAdmin()): ?>
-                    <a href="<?= APP_URL ?>/views/admin/events.php" class="nav-badge">Back-office</a>
+        <?php if (isAdmin()): ?>
+            <a href="<?= APP_URL ?>/views/admin/events.php" class="nav-badge">
+                Événements
+            </a>
+            <a href="<?= APP_URL ?>/views/admin/messages.php" class="nav-badge">
+                Messages
+                <?php
+                require_once __DIR__ . '/../../src/models/ContactModel.php';
+                $unread = (new ContactModel(getPDO()))->countUnread();
+                if ($unread > 0):
+                ?>
+                    <span style="background:#fff;color:var(--color-red);
+                                 border-radius:20px;font-size:10px;
+                                 padding:1px 6px;margin-left:4px;
+                                 font-weight:700">
+                        <?= $unread ?>
+                    </span>
                 <?php endif; ?>
-                <a href="<?= APP_URL ?>/src/controllers/AuthController.php?action=logout">
-                    Déconnexion (<?= e($_SESSION['username']) ?>)
-                </a>
-            <?php else: ?>
-                <a href="<?= APP_URL ?>/auth/login.php">Connexion</a>
-                <a href="<?= APP_URL ?>/auth/register.php">Inscription</a>
-            <?php endif; ?>
-        </nav>
+            </a>
+        <?php endif; ?>
+
+        <a href="<?= APP_URL ?>/src/controllers/AuthController.php?action=logout">
+            Déconnexion (<?= e($_SESSION['username']) ?>)
+        </a>
+
+    <?php else: ?>
+        <a href="<?= APP_URL ?>/auth/login.php">Connexion</a>
+        <a href="<?= APP_URL ?>/auth/register.php">Inscription</a>
+    <?php endif; ?>
+</nav>
     </div>
 </header>
 

@@ -21,7 +21,19 @@ require_once __DIR__ . '/../partials/header.php';
         </p>
     </div>
 
-    <!-- Filtres rapides sur la carte -->
+    <div class="map-search-bar">
+        <input
+            type="text"
+            id="city-search"
+            class="form-input"
+            placeholder="🔍 Rechercher une ville ou une adresse..."
+            autocomplete="off"
+        >
+        <button class="btn btn--primary" onclick="searchCity()">Rechercher</button>
+        <button class="btn btn--ghost" onclick="resetMap()">Réinitialiser</button>
+    </div>
+    <div id="search-suggestions" class="search-suggestions"></div>
+
     <div class="map-filters" role="group" aria-label="Filtrer par type">
         <button class="map-filter-btn map-filter-btn--active" data-type="all">Tous</button>
         <?php foreach (EVENT_TYPES as $key => $label): ?>
@@ -29,13 +41,14 @@ require_once __DIR__ . '/../partials/header.php';
         <?php endforeach; ?>
     </div>
 
-    <!-- Conteneur de la carte Leaflet -->
     <div id="events-map" class="leaflet-map" aria-label="Carte des événements automobiles"></div>
 </section>
 
-<!-- Leaflet depuis CDN -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <script>
 const EVENTS_DATA = <?= $eventsJson ?>;
@@ -72,7 +85,13 @@ function makeIcon(type) {
     });
 }
 
-const markers = [];
+let markerCluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius   : 60,
+});
+map.addLayer(markerCluster);
+
+let allMarkers = [];
 
 EVENTS_DATA.forEach(ev => {
     if (!ev.latitude || !ev.longitude) return;
@@ -95,29 +114,131 @@ EVENTS_DATA.forEach(ev => {
             <h3 class="popup-title">${ev.title}</h3>
             <p class="popup-date">📅 ${dateStr}</p>
             <p class="popup-location">📍 ${ev.location}</p>
+            <a href="<?= APP_URL ?>/views/events/show.php?id=${ev.id}" class="popup-link">Voir le détail →</a>
         </div>
     `, { minWidth: 220 });
 
-    marker.addTo(map);
-    markers.push(marker);
+    allMarkers.push(marker);
+    markerCluster.addLayer(marker);
 });
+
+function applyFilter(type) {
+    markerCluster.clearLayers();
+    allMarkers.forEach(m => {
+        if (type === 'all' || m.options.eventType === type) {
+            markerCluster.addLayer(m);
+        }
+    });
+}
 
 document.querySelectorAll('.map-filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        const type = btn.dataset.type;
-
         document.querySelectorAll('.map-filter-btn')
             .forEach(b => b.classList.remove('map-filter-btn--active'));
         btn.classList.add('map-filter-btn--active');
-
-        markers.forEach(m => {
-            if (type === 'all' || m.options.eventType === type) {
-                m.addTo(map);
-            } else {
-                m.remove();
-            }
-        });
+        applyFilter(btn.dataset.type);
     });
+});
+
+let searchMarker  = null;
+let debounceTimer = null;
+const searchInput    = document.getElementById('city-search');
+const suggestionsBox = document.getElementById('search-suggestions');
+
+searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const query = searchInput.value.trim();
+    if (query.length < 3) {
+        suggestionsBox.innerHTML = '';
+        suggestionsBox.style.display = 'none';
+        return;
+    }
+    debounceTimer = setTimeout(() => fetchSuggestions(query), 500);
+});
+
+async function fetchSuggestions(query) {
+    const url = `https://nominatim.openstreetmap.org/search?` +
+        new URLSearchParams({
+            q                : query,
+            format           : 'json',
+            limit            : 5,
+            countrycodes     : 'fr',
+            'accept-language': 'fr',
+        });
+    try {
+        const res  = await fetch(url);
+        const data = await res.json();
+        if (data.length === 0) {
+            suggestionsBox.innerHTML = '<div class="suggestion-item">Aucun résultat</div>';
+            suggestionsBox.style.display = 'block';
+            return;
+        }
+        suggestionsBox.innerHTML = data.map(item => `
+            <div class="suggestion-item"
+                 onclick="selectSuggestion(${item.lat}, ${item.lon}, '${item.display_name.replace(/'/g, "\\'")}')">
+                📍 ${item.display_name}
+            </div>
+        `).join('');
+        suggestionsBox.style.display = 'block';
+    } catch (err) {
+        console.warn('Erreur Nominatim :', err);
+    }
+}
+
+function selectSuggestion(lat, lng, name) {
+    searchInput.value = name;
+    suggestionsBox.innerHTML = '';
+    suggestionsBox.style.display = 'none';
+    flyToLocation(parseFloat(lat), parseFloat(lng));
+}
+
+async function searchCity() {
+    const query = searchInput.value.trim();
+    if (!query) return;
+    const url = `https://nominatim.openstreetmap.org/search?` +
+        new URLSearchParams({
+            q                : query,
+            format           : 'json',
+            limit            : 1,
+            countrycodes     : 'fr',
+            'accept-language': 'fr',
+        });
+    try {
+        const res  = await fetch(url);
+        const data = await res.json();
+        if (data.length > 0) {
+            flyToLocation(parseFloat(data[0].lat), parseFloat(data[0].lon));
+        }
+    } catch (err) {
+        console.warn('Erreur recherche :', err);
+    }
+}
+
+function flyToLocation(lat, lng) {
+    map.flyTo([lat, lng], 12, { duration: 1.2 });
+    if (searchMarker) searchMarker.remove();
+    searchMarker = L.marker([lat, lng], {
+        icon: L.divIcon({
+            html      : '<div class="search-pin"></div>',
+            className : '',
+            iconSize  : [16, 16],
+            iconAnchor: [8, 8],
+        })
+    }).addTo(map);
+}
+
+function resetMap() {
+    searchInput.value = '';
+    suggestionsBox.innerHTML = '';
+    suggestionsBox.style.display = 'none';
+    if (searchMarker) { searchMarker.remove(); searchMarker = null; }
+    map.flyTo([46.603354, 1.888334], 6, { duration: 1.2 });
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.map-search-bar') && !e.target.closest('#search-suggestions')) {
+        suggestionsBox.style.display = 'none';
+    }
 });
 </script>
 

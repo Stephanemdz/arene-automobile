@@ -43,7 +43,7 @@ class EventModel
     public function findById(int $id): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT e.*, u.username FROM   events  JOIN   users  u ON u.id = e.user_id WHERE  e.id = :id'
+            'SELECT e.*, u.username FROM   events e JOIN   users  u ON u.id = e.user_id WHERE  e.id = :id'
         );
         $stmt->execute([':id' => $id]);
         $row = $stmt->fetch();
@@ -114,5 +114,17 @@ class EventModel
         ':type'        => $data['type'],
         ':id'          => $id,
     ]);
+}
+
+/** Événements soumis par un utilisateur donné. */
+public function getByUser(int $userId): array
+{
+    $stmt = $this->pdo->prepare(
+        'SELECT * FROM events
+         WHERE  user_id = :user_id
+         ORDER  BY created_at DESC'
+    );
+    $stmt->execute([':user_id' => $userId]);
+    return $stmt->fetchAll();
 }
 }
