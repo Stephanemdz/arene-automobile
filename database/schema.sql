@@ -48,4 +48,55 @@ CREATE INDEX idx_events_status   ON events(status);
 CREATE INDEX idx_events_type     ON events(type);
 CREATE INDEX idx_events_date     ON events(event_date);
 
+CREATE TABLE IF NOT EXISTS favorites (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT UNSIGNED NOT NULL,
+    event_id   INT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    UNIQUE KEY uq_favorite (user_id, event_id),
+
+    CONSTRAINT fk_favorites_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_favorites_event
+        FOREIGN KEY (event_id) REFERENCES events(id)
+        ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS comments (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT UNSIGNED NOT NULL,
+    event_id   INT UNSIGNED NOT NULL,
+    content    TEXT         NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_comments_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_comments_event
+        FOREIGN KEY (event_id) REFERENCES events(id)
+        ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX idx_comments_event ON comments(event_id);
+
+
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(120) NOT NULL,
+    email      VARCHAR(180) NOT NULL,
+    subject    VARCHAR(255) NOT NULL,
+    message    TEXT         NOT NULL,
+    is_read    TINYINT(1)   NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX idx_contact_read ON contact_messages(is_read);
