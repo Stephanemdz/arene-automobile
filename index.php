@@ -68,6 +68,10 @@ require_once __DIR__ . '/views/partials/header.php';
                             <?php endif; ?>
                         </p>
                         <p class="event-card__location">📍 <?= e($event['location']) ?></p>
+                        <div class="event-card__footer">
+                           <a href="<?= APP_URL ?>/views/events/show.php?id=<?= (int)$event['id'] ?>"
+                            class="btn btn--ghost btn--sm">Voir le détail →</a>
+                        </div>
                     </div>
                 </article>
             <?php endforeach; ?>
